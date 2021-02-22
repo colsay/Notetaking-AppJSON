@@ -1,0 +1,17 @@
+h1 {
+  margin: 10px;
+}
+
+img {
+  height: 60%;
+  width: 20%;
+  margin: 10px;
+}
+
+.form-group {
+  margin: 10px !important;
+}
+
+.btn {
+  margin-top: 5px;
+}

@@ -1,0 +1,27 @@
+<h1>Write note, Save thoughts</h1>
+<img src="./image/takenote.jpg" alt='save thoughts' />
+
+    <form action="/addNotes" method="POST">
+    <div class='row'>
+        <div class="form-group col-sm-6">
+            
+          
+            <textarea class="form-control" type="text" name="newNote" id="newNote"
+                placeholder="Add new Note" ></textarea>
+         
+            <button class="btn btn-success" type="submit">Add Note</button>
+
+        </div>
+        </div>
+        </div>
+    </form>
+
+<div class='row'>
+
+{{#each hellos }}
+    <div class='col-sm-6'>
+        <p>Note</p>
+        {{this}}
+        </div>
+        {{/each}}
+</div>
