@@ -3,19 +3,20 @@ const app = express();
 const handlebars = require("express-handlebars");
 const bodyParser = require("body-parser");
 const fs = require('fs')
+const path = require('path')
 const basicAuth = require("express-basic-auth");
 
+const NoteRouter = require("./Router");
+const NoteService = require("./noteService");
+const noteService = new NoteService("./Database/database.json");
 
-// const myAuthorizer = require("./utils/MyAuthorizer");
-// const ViewRouter = require("./Routers/ViewRouter");
-// const OrderService = require("./Services/orderService");
-// const OrderRouter = require("./Routers/orderRouter");
-// const orderService = new OrderService("./stores/orders.json");
-// const orderRouter = new OrderRouter(orderService);
 
 app.engine("handlebars", handlebars({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
+
 app.use(express.static("public"));
+
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(
@@ -26,6 +27,7 @@ app.use(
         realm: "My Application",
     })
 );
+
 
 function myAuthorizer(username, password, callback) {
     const USERS = fs.readFileSync('./users.json', 'utf-8', async (err, data) => {
@@ -43,20 +45,28 @@ function myAuthorizer(username, password, callback) {
     }
 }
 
-// // For all pages being sent from the server
-// app.use("/", new ViewRouter().router());
-// app.use("/api/orders", orderRouter.router());
-
-const hello = {
-    hellos: [{ note1: 123 }]
-}
-
-app.get("/", (req, res) => {
-    // console.log(hello.pizza.note1)
-    res.render('index', hello)
+app.get("/", (req, res, next) => {
+    console.log("Getting");
+    next();
 });
 
+app.get("/", (req, res) => {
+    console.log(req.auth.user, req.auth.password);
+    noteService.list(req.auth.user).then((data) => {
+        console.log(data);
+        res.render("index", {
+            user: req.auth.user,
+            notes: data,
+        });
+    });
+});
+
+
+app.use("/api/notes", new NoteRouter(noteService).router());
 
 app.listen(8000, () => {
     console.log("Application listening to port 8000");
 });
+
+
+module.exports = app;

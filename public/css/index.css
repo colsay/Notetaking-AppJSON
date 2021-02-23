@@ -1,4 +1,7 @@
-h1 {
+h1,
+h2,
+h3,
+h4 {
   margin: 10px;
 }
 
@@ -8,7 +11,8 @@ img {
   margin: 10px;
 }
 
-.form-group {
+.form-group,
+.note {
   margin: 10px !important;
 }
 
