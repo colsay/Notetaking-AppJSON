@@ -12,7 +12,8 @@ $(function () {
             url: "http://localhost:8000/api/notes",
             dataType: "text",
             data: { note: data },
-            success: function () {
+            success: function (data) {
+                console.log(data)
                 console.log('success')
             },
 
