@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
-const handlebars = require("express-handlebars");
-const bodyParser = require("body-parser");
+
 const fs = require('fs')
 const path = require('path')
+
+const handlebars = require("express-handlebars");
+const bodyParser = require("body-parser");
+
 const basicAuth = require("express-basic-auth");
 
 const NoteRouter = require("./Router");
@@ -14,10 +17,15 @@ const noteService = new NoteService("./Database/database.json");
 app.engine("handlebars", handlebars({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+console.log(app.get('view engine'))
+
 app.use(express.static("public"));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// const {urlencoded, json} = require ('express')
+// app.use(json()) , app.use(urlencoded({extended:false}))
 
 app.use(
     basicAuth({
@@ -27,7 +35,6 @@ app.use(
         realm: "My Application",
     })
 );
-
 
 function myAuthorizer(username, password, callback) {
     const USERS = fs.readFileSync('./users.json', 'utf-8', async (err, data) => {
@@ -45,10 +52,6 @@ function myAuthorizer(username, password, callback) {
     }
 }
 
-app.get("/", (req, res, next) => {
-    console.log("Getting");
-    next();
-});
 
 app.get("/", (req, res) => {
     console.log(req.auth.user, req.auth.password);
@@ -60,7 +63,6 @@ app.get("/", (req, res) => {
         });
     });
 });
-
 
 app.use("/api/notes", new NoteRouter(noteService).router());
 

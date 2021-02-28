@@ -16,6 +16,7 @@ class NoteRouter {
 
     get(req, res) {
         console.log(req.auth)
+        console.log('yes')
         return (this.noteService).list(req.auth.user).then((notes) => {
             console.log(notes);
             res.json(notes);

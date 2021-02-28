@@ -6,6 +6,7 @@ $(function () {
         console.log(e)
         let data = $('#newNote').val()
         console.log(data)
+        // console.log('hello')
         $.ajax({
             type: 'POST',
             url: "http://localhost:8000/api/notes",
